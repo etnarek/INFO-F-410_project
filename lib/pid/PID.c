@@ -1,6 +1,6 @@
 /********
 * ec2c version 0.67
-* c file generated for node : PID 
+* c file generated for node : PID
 * context   method = HEAP
 * ext call  method = PROCEDURES
 ********/

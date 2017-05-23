@@ -2,8 +2,8 @@
 * ec2c version 0.67
 * context   method = HEAP
 * ext call  method = PROCEDURES
-* c header file generated for node : PID 
-* to be used with : PID.c 
+* c header file generated for node : PID
+* to be used with : PID.c
 ********/
 #ifndef _PID_EC2C_H_FILE
 #define _PID_EC2C_H_FILE

@@ -1,7 +1,10 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 #include <Arduino.h>
-#include "pid/PID.c"
+
+extern "C"{
+#include <PID.h>
+}
 
 enum ControlType {ON, OFF, FULL};
 typedef enum ControlType controlType;
@@ -9,7 +12,7 @@ typedef enum ControlType controlType;
 class Controller{
     public:
         controlType control;
-        int threshold;
+        int treshold;
         String name;
 
         Controller(String name);
