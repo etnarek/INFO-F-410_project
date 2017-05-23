@@ -1,0 +1,14 @@
+const
+  KP = 1;
+  KI = 1;
+  KD = 1;
+
+node PID(VALUE, TARGET : int) returns (CORRECTION : int);
+var ERROR, INTEG, DERIV : int;
+let
+  ERROR = TARGET - VALUE;
+  INTEG = 0 -> pre(INTEG) + ERROR;
+  DERIV = 0 -> ERROR - pre(DERIV);
+
+  CORRECTION = KP * ERROR + KI * INTEG + KD * DERIV;
+tel
