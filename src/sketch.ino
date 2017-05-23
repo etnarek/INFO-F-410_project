@@ -4,10 +4,10 @@
 const char *WIFI_SSID = "Hello_IoT";
 const char *WIFI_PASSWD = "12345678";
 
-Controller PIDcontroller {ON, 400, "pid"};
+PIDcontroller pidController("pid");
 
-Controller controllers[] = {PIDcontroller};
-const size_t nControlllers = sizeof(controllers)/sizeof(Controller);
+Controller *controllers[] = {&pidController};
+const size_t nControlllers = 2;
 
 ControlWebServer server(80, controllers, nControlllers);
 
