@@ -8,7 +8,7 @@ var ERROR, INTEG, DERIV : int;
 let
   ERROR = TARGET - VALUE;
   INTEG = 0 -> pre(INTEG) + ERROR;
-  DERIV = 0 -> ERROR - pre(DERIV);
+  DERIV = ERROR - pre(ERROR);
 
   CORRECTION = KP * ERROR + KI * INTEG + KD * DERIV;
 tel

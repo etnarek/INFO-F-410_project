@@ -2,8 +2,8 @@
 * ec2c version 0.67
 * context   method = HEAP
 * ext call  method = PROCEDURES
-* c header file generated for node : PID
-* to be used with : PID.c
+* c header file generated for node : PID 
+* to be used with : PID.c 
 ********/
 #ifndef _PID_EC2C_H_FILE
 #define _PID_EC2C_H_FILE
@@ -20,22 +20,16 @@ typedef float _float;
 #define _true 1
 #endif
 /*--------- Pragmas ----------------*/
-//MODULE: PID 5 1
-//IN: _real VALUE
-//IN: _real TARGET
-//IN: _real KP
-//IN: _real KI
-//IN: _real KD
-//OUT: _real CORRECTION
+//MODULE: PID 2 1
+//IN: _integer VALUE
+//IN: _integer TARGET
+//OUT: _integer CORRECTION
 #ifndef _PID_EC2C_SRC_FILE
 /*--------Context type -------------*/
 struct PID_ctx;
 /*-------- Input procedures -------------*/
-extern void PID_I_VALUE(struct PID_ctx* ctx, _real);
-extern void PID_I_TARGET(struct PID_ctx* ctx, _real);
-extern void PID_I_KP(struct PID_ctx* ctx, _real);
-extern void PID_I_KI(struct PID_ctx* ctx, _real);
-extern void PID_I_KD(struct PID_ctx* ctx, _real);
+extern void PID_I_VALUE(struct PID_ctx* ctx, _integer);
+extern void PID_I_TARGET(struct PID_ctx* ctx, _integer);
 /*-------- Reset procedure -----------*/
 extern void PID_reset(struct PID_ctx* ctx);
 /*--------Context copy -------------*/
