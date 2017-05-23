@@ -1,6 +1,8 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 #include <Arduino.h>
+#include <BANG.h>
+
 
 extern "C"{
 #include <PID.h>
@@ -27,6 +29,13 @@ class PIDcontroller : public Controller {
         PIDcontroller(String name);
         int next_correction(int current_value);
         double kp, ki, kd;
+};
+
+class BANGcontroller : public Controller {
+    public:
+        BANGcontroller(String name);
+        int next_correction(int current_value);
+        void BANG_O_CORRECTION(void* cdata, _integer value);
 };
 
 #endif //CONTROLLER_H
