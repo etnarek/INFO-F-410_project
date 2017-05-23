@@ -14,28 +14,40 @@ Internal structure for the call
 typedef struct  {
    void* client_data;
    //INPUTS
-   _integer _VALUE;
-   _integer _TARGET;
+   _real _VALUE;
+   _real _TARGET;
+   _real _KP;
+   _real _KI;
+   _real _KD;
    //OUTPUTS
-   _integer _CORRECTION;
+   _real _CORRECTION;
    //REGISTERS
-   _integer M17;
-   _boolean M17_nil;
-   _integer M14;
-   _boolean M14_nil;
-   _boolean M7;
+   _real M19;
+   _boolean M19_nil;
+   _real M16;
+   _boolean M16_nil;
+   _boolean M9;
 } PID_ctx;
 /*--------
 Output procedures must be defined,
 Input procedures must be used:
 --------*/
-void PID_I_VALUE(PID_ctx* ctx, _integer V){
+void PID_I_VALUE(PID_ctx* ctx, _real V){
    ctx->_VALUE = V;
 }
-void PID_I_TARGET(PID_ctx* ctx, _integer V){
+void PID_I_TARGET(PID_ctx* ctx, _real V){
    ctx->_TARGET = V;
 }
-extern void PID_O_CORRECTION(void* cdata, _integer);
+void PID_I_KP(PID_ctx* ctx, _real V){
+   ctx->_KP = V;
+}
+void PID_I_KI(PID_ctx* ctx, _real V){
+   ctx->_KI = V;
+}
+void PID_I_KD(PID_ctx* ctx, _real V){
+   ctx->_KD = V;
+}
+extern void PID_O_CORRECTION(void* cdata, _real);
 #ifdef CKCHECK
 extern void PID_BOT_CORRECTION(void* cdata);
 #endif
@@ -49,9 +61,9 @@ static void PID_reset_input(PID_ctx* ctx){
 Reset procedure
 --------*/
 void PID_reset(PID_ctx* ctx){
-   ctx->M17_nil = _true;
-   ctx->M14_nil = _true;
-   ctx->M7 = _true;
+   ctx->M19_nil = _true;
+   ctx->M16_nil = _true;
+   ctx->M9 = _true;
    PID_reset_input(ctx);
 }
 /*--------
@@ -74,43 +86,43 @@ Step procedure
 --------*/
 void PID_step(PID_ctx* ctx){
 //LOCAL VARIABLES
-   _integer L10;
-   _integer L6;
-   _integer L4;
-   _integer L13;
-   _integer L12;
-   _integer L11;
-   _integer L3;
-   _integer L16;
-   _integer L15;
-   _integer L2;
-   _integer T17;
-   _integer T14;
+   _real L12;
+   _real L8;
+   _real L7;
+   _real L15;
+   _real L14;
+   _real L13;
+   _real L6;
+   _real L18;
+   _real L17;
+   _real L5;
+   _real T19;
+   _real T16;
 //CODE
-   L10 = (ctx->_TARGET - ctx->_VALUE);
-   if (ctx->M7) {
-      L6 = 0;
+   L12 = (ctx->_TARGET - ctx->_VALUE);
+   if (ctx->M9) {
+      L8 = 0.000000;
    } else {
-      L6 = L10;
+      L8 = L12;
    }
-   L4 = (1 * L6);
-   L13 = (ctx->M14 + L6);
-   if (ctx->M7) {
-      L12 = 0;
+   L7 = (ctx->_KP * L8);
+   L15 = (ctx->M16 + L8);
+   if (ctx->M9) {
+      L14 = 0.000000;
    } else {
-      L12 = L13;
+      L14 = L15;
    }
-   L11 = (1 * L12);
-   L3 = (L4 + L11);
-   L16 = (L6 - ctx->M17);
-   L15 = (1 * L16);
-   L2 = (L3 + L15);
-   PID_O_CORRECTION(ctx->client_data, L2);
-   T17 = L6;
-   T14 = L12;
-   ctx->M17 = T17;
-   ctx->M17_nil = _false;
-   ctx->M14 = T14;
-   ctx->M14_nil = _false;
-   ctx->M7 = ctx->M7 && !(_true);
+   L13 = (ctx->_KI * L14);
+   L6 = (L7 + L13);
+   L18 = (L8 - ctx->M19);
+   L17 = (ctx->_KD * L18);
+   L5 = (L6 + L17);
+   PID_O_CORRECTION(ctx->client_data, L5);
+   T19 = L8;
+   T16 = L14;
+   ctx->M19 = T19;
+   ctx->M19_nil = _false;
+   ctx->M16 = T16;
+   ctx->M16_nil = _false;
+   ctx->M9 = ctx->M9 && !(_true);
 }
