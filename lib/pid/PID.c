@@ -19,11 +19,11 @@ typedef struct  {
    //OUTPUTS
    _integer _CORRECTION;
    //REGISTERS
-   _integer M16;
-   _boolean M16_nil;
-   _integer M13;
-   _boolean M13_nil;
-   _boolean M9;
+   _integer M17;
+   _boolean M17_nil;
+   _integer M14;
+   _boolean M14_nil;
+   _boolean M7;
 } PID_ctx;
 /*--------
 Output procedures must be defined,
@@ -49,9 +49,9 @@ static void PID_reset_input(PID_ctx* ctx){
 Reset procedure
 --------*/
 void PID_reset(PID_ctx* ctx){
-   ctx->M16_nil = _true;
-   ctx->M13_nil = _true;
-   ctx->M9 = _true;
+   ctx->M17_nil = _true;
+   ctx->M14_nil = _true;
+   ctx->M7 = _true;
    PID_reset_input(ctx);
 }
 /*--------
@@ -74,37 +74,43 @@ Step procedure
 --------*/
 void PID_step(PID_ctx* ctx){
 //LOCAL VARIABLES
+   _integer L10;
    _integer L6;
    _integer L4;
+   _integer L13;
    _integer L12;
-   _integer L8;
-   _integer L7;
+   _integer L11;
    _integer L3;
+   _integer L16;
    _integer L15;
-   _integer L14;
    _integer L2;
-   _integer T16;
-   _integer T13;
+   _integer T17;
+   _integer T14;
 //CODE
-   L6 = (ctx->_TARGET - ctx->_VALUE);
-   L4 = (1 * L6);
-   L12 = (ctx->M13 + L6);
-   if (ctx->M9) {
-      L8 = 0;
+   L10 = (ctx->_TARGET - ctx->_VALUE);
+   if (ctx->M7) {
+      L6 = 0;
    } else {
-      L8 = L12;
+      L6 = L10;
    }
-   L7 = (1 * L8);
-   L3 = (L4 + L7);
-   L15 = (L6 - ctx->M16);
-   L14 = (1 * L15);
-   L2 = (L3 + L14);
+   L4 = (1 * L6);
+   L13 = (ctx->M14 + L6);
+   if (ctx->M7) {
+      L12 = 0;
+   } else {
+      L12 = L13;
+   }
+   L11 = (1 * L12);
+   L3 = (L4 + L11);
+   L16 = (L6 - ctx->M17);
+   L15 = (1 * L16);
+   L2 = (L3 + L15);
    PID_O_CORRECTION(ctx->client_data, L2);
-   T16 = L6;
-   T13 = L8;
-   ctx->M16 = T16;
-   ctx->M16_nil = _false;
-   ctx->M13 = T13;
-   ctx->M13_nil = _false;
-   ctx->M9 = ctx->M9 && !(_true);
+   T17 = L6;
+   T14 = L12;
+   ctx->M17 = T17;
+   ctx->M17_nil = _false;
+   ctx->M14 = T14;
+   ctx->M14_nil = _false;
+   ctx->M7 = ctx->M7 && !(_true);
 }

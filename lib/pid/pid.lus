@@ -6,7 +6,7 @@ const
 node PID(VALUE, TARGET : int) returns (CORRECTION : int);
 var ERROR, INTEG, DERIV : int;
 let
-  ERROR = TARGET - VALUE;
+  ERROR = 0 -> TARGET - VALUE;
   INTEG = 0 -> pre(INTEG) + ERROR;
   DERIV = ERROR - pre(ERROR);
 
