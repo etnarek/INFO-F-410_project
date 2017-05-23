@@ -16,8 +16,12 @@ void setup(){
     WiFi.softAP(WIFI_SSID, WIFI_PASSWD);
 
     server.begin();
+    Serial.begin(115200);
 }
 
 void loop(){
     server.handleClient();
+    int sensorValue = analogRead(A0);
+    float voltage = sensorValue * (3.2 / 1023.0);
+    Serial.println(voltage);
 }
