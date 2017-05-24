@@ -1,5 +1,6 @@
 #include <ControlWebServer.h>
 #include <Controller.h>
+#include <Sensor.h>
 
 const char *WIFI_SSID = "Hello_IoT";
 const char *WIFI_PASSWD = "12345678";
@@ -8,6 +9,8 @@ PIDcontroller pidController("pid");
 
 Controller *controllers[] = {&pidController};
 const size_t nControlllers = 2;
+
+PhotoSensor l(A0, 10000, 3.3, 2614, 296, 0.8);
 
 ControlWebServer server(80, controllers, nControlllers);
 
@@ -21,7 +24,5 @@ void setup(){
 
 void loop(){
     server.handleClient();
-    int sensorValue = analogRead(A0);
-    float voltage = sensorValue * (3.2 / 1023.0);
-    Serial.println(voltage);
+    Serial.println(l.sensor_value());
 }
