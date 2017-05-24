@@ -1,10 +1,6 @@
 
 
 node BANG(VALUE, TARGET : int) returns (CORRECTION : int);
-var RES : int; ERROR: bool;
 let
-  ERROR = TARGET >= VALUE; 
-  RES = if ERROR then 1
-  			 else 0;
-  CORRECTION = RES;
+  CORRECTION = if TARGET >= VALUE then 1 else 0;
 tel
