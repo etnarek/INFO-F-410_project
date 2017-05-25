@@ -1,12 +1,41 @@
-node PID(VALUE, TARGET, KP, KI, KD : real) returns (CORRECTION : real);
-var ERROR, INTEG, DERIV, COMPUT : real;
-let
-  ERROR = 0.0 -> TARGET - VALUE;
-  INTEG = 0.0 -> pre(INTEG) + ERROR;
-  DERIV = ERROR - pre(ERROR);
+const MINVAL = 0.0;
+const MAXVAL = 255.0;
+const ON = 1;
+const OFF = 0;
+const FULL = 2;
 
-  COMPUT = KP * ERROR + KI * INTEG + KD * DERIV;
-  CORRECTION = if (COMPUT < 0.0) then 0.0
-                else if (COMPUT > 255.0) then 255.0
-                else COMPUT;
+node PID(VALUE, TARGET, KP, KI, KD : real; CTRL : int) returns (NEW_VALUE : real);
+let
+  NEW_VALUE = 0.0 -> if (CTRL = ON) then PID_SUBROUTINE(VALUE, TARGET, KP, KI, KD)
+                else if (CTRL = OFF) then MINVAL
+                  else if (CTRL = FULL) then MAXVAL
+                    else pre(NEW_VALUE);
+tel
+
+node PID_SUBROUTINE(VALUE, TARGET, KP, KI, KD : real) returns (NEW_VALUE : real);
+var ERROR, INTEG, DERIV, V : real;
+let
+  ERROR = P(VALUE, TARGET);
+  INTEG = I(ERROR);
+  DERIV = 0.0 -> D(ERROR, pre(ERROR));
+
+  V = ERROR * KP + INTEG * KI + DERIV * KD;
+  NEW_VALUE = if (V > MAXVAL) then MAXVAL
+                else if (V < MINVAL) then MINVAL
+                  else V;
+tel
+
+node P(VALUE, TARGET : real) returns (P_VALUE : real);
+let
+  P_VALUE = TARGET - VALUE;
+tel
+
+node I(ERROR : real) returns (I_VALUE : real);
+let
+  I_VALUE = 0.0 -> pre(I_VALUE) + ERROR;
+tel
+
+node D(ERROR, PRE_ERROR : real) returns (D_VALUE : real);
+let
+  D_VALUE = ERROR - PRE_ERROR;
 tel

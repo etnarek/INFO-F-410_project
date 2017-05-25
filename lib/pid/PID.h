@@ -20,13 +20,14 @@ typedef float _float;
 #define _true 1
 #endif
 /*--------- Pragmas ----------------*/
-//MODULE: PID 5 1
+//MODULE: PID 6 1
 //IN: _real VALUE
 //IN: _real TARGET
 //IN: _real KP
 //IN: _real KI
 //IN: _real KD
-//OUT: _real CORRECTION
+//IN: _integer CTRL
+//OUT: _real NEW_VALUE
 #ifndef _PID_EC2C_SRC_FILE
 /*--------Context type -------------*/
 struct PID_ctx;
@@ -36,6 +37,7 @@ extern void PID_I_TARGET(struct PID_ctx* ctx, _real);
 extern void PID_I_KP(struct PID_ctx* ctx, _real);
 extern void PID_I_KI(struct PID_ctx* ctx, _real);
 extern void PID_I_KD(struct PID_ctx* ctx, _real);
+extern void PID_I_CTRL(struct PID_ctx* ctx, _integer);
 /*-------- Reset procedure -----------*/
 extern void PID_reset(struct PID_ctx* ctx);
 /*--------Context copy -------------*/

@@ -7,7 +7,7 @@ extern "C"{
 #include <BANG.h>
 }
 
-enum ControlType {ON, OFF, FULL};
+enum ControlType {OFF = 0, ON = 1, FULL = 2};
 typedef enum ControlType controlType;
 
 class Controller{
@@ -28,6 +28,7 @@ class PIDcontroller : public Controller {
         PIDcontroller(String name);
         int next_correction(int current_value);
         double kp, ki, kd;
+        ControlType ctrl;
 };
 
 class BANGcontroller : public Controller {
