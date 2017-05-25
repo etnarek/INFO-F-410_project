@@ -7,7 +7,7 @@ extern "C"{
 #include <BANG.h>
 }
 
-enum ControlType {ON, OFF, FULL};
+enum ControlType {OFF = 0, ON = 1, FULL = 2};
 typedef enum ControlType controlType;
 
 class Controller{

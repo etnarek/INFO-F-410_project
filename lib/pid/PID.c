@@ -19,14 +19,17 @@ typedef struct  {
    _real _KP;
    _real _KI;
    _real _KD;
+   _integer _CTRL;
    //OUTPUTS
-   _real _CORRECTION;
+   _real _NEW_VALUE;
    //REGISTERS
-   _real M21;
-   _boolean M21_nil;
-   _real M18;
-   _boolean M18_nil;
-   _boolean M11;
+   _real M36;
+   _boolean M36_nil;
+   _real M26;
+   _boolean M26_nil;
+   _real M22;
+   _boolean M22_nil;
+   _boolean M7;
 } PID_ctx;
 /*--------
 Output procedures must be defined,
@@ -47,9 +50,12 @@ void PID_I_KI(PID_ctx* ctx, _real V){
 void PID_I_KD(PID_ctx* ctx, _real V){
    ctx->_KD = V;
 }
-extern void PID_O_CORRECTION(void* cdata, _real);
+void PID_I_CTRL(PID_ctx* ctx, _integer V){
+   ctx->_CTRL = V;
+}
+extern void PID_O_NEW_VALUE(void* cdata, _real);
 #ifdef CKCHECK
-extern void PID_BOT_CORRECTION(void* cdata);
+extern void PID_BOT_NEW_VALUE(void* cdata);
 #endif
 /*--------
 Internal reset input procedure
@@ -61,9 +67,10 @@ static void PID_reset_input(PID_ctx* ctx){
 Reset procedure
 --------*/
 void PID_reset(PID_ctx* ctx){
-   ctx->M21_nil = _true;
-   ctx->M18_nil = _true;
-   ctx->M11 = _true;
+   ctx->M36_nil = _true;
+   ctx->M26_nil = _true;
+   ctx->M22_nil = _true;
+   ctx->M7 = _true;
    PID_reset_input(ctx);
 }
 /*--------
@@ -86,59 +93,93 @@ Step procedure
 --------*/
 void PID_step(PID_ctx* ctx){
 //LOCAL VARIABLES
-   _real L14;
-   _real L10;
-   _real L9;
+   _boolean L11;
+   _real L18;
    _real L17;
-   _real L16;
-   _real L15;
-   _real L8;
+   _real L21;
    _real L20;
    _real L19;
-   _real L7;
-   _boolean L6;
-   _boolean L23;
-   _real L22;
-   _real L5;
-   _real T21;
-   _real T18;
+   _real L16;
+   _real L25;
+   _real L24;
+   _real L23;
+   _real L15;
+   _boolean L14;
+   _boolean L29;
+   _real L28;
+   _real L13;
+   _boolean L31;
+   _boolean L34;
+   _real L33;
+   _real L30;
+   _real L10;
+   _real L6;
+   _real T36;
+   _real T26;
+   _real T22;
 //CODE
-   L14 = (ctx->_TARGET - ctx->_VALUE);
-   if (ctx->M11) {
-      L10 = 0.000000;
+   L11 = (ctx->_CTRL == 1);
+   L18 = (ctx->_TARGET - ctx->_VALUE);
+   L17 = (L18 * ctx->_KP);
+   L21 = (ctx->M22 + L18);
+   if (ctx->M7) {
+      L20 = 0.000000;
    } else {
-      L10 = L14;
+      L20 = L21;
    }
-   L9 = (ctx->_KP * L10);
-   L17 = (ctx->M18 + L10);
-   if (ctx->M11) {
-      L16 = 0.000000;
+   L19 = (L20 * ctx->_KI);
+   L16 = (L17 + L19);
+   L25 = (L18 - ctx->M26);
+   if (ctx->M7) {
+      L24 = 0.000000;
    } else {
-      L16 = L17;
+      L24 = L25;
    }
-   L15 = (ctx->_KI * L16);
-   L8 = (L9 + L15);
-   L20 = (L10 - ctx->M21);
-   L19 = (ctx->_KD * L20);
-   L7 = (L8 + L19);
-   L6 = (L7 < 0.000000);
-   L23 = (L7 > 255.000000);
-   if (L23) {
-      L22 = 255.000000;
+   L23 = (L24 * ctx->_KD);
+   L15 = (L16 + L23);
+   L14 = (L15 > 255.000000);
+   L29 = (L15 < 0.000000);
+   if (L29) {
+      L28 = 0.000000;
    } else {
-      L22 = L7;
+      L28 = L15;
    }
-   if (L6) {
-      L5 = 0.000000;
+   if (L14) {
+      L13 = 255.000000;
    } else {
-      L5 = L22;
+      L13 = L28;
    }
-   PID_O_CORRECTION(ctx->client_data, L5);
-   T21 = L10;
-   T18 = L16;
-   ctx->M21 = T21;
-   ctx->M21_nil = _false;
-   ctx->M18 = T18;
-   ctx->M18_nil = _false;
-   ctx->M11 = ctx->M11 && !(_true);
+   L31 = (ctx->_CTRL == 0);
+   L34 = (ctx->_CTRL == 2);
+   if (L34) {
+      L33 = 255.000000;
+   } else {
+      L33 = ctx->M36;
+   }
+   if (L31) {
+      L30 = 0.000000;
+   } else {
+      L30 = L33;
+   }
+   if (L11) {
+      L10 = L13;
+   } else {
+      L10 = L30;
+   }
+   if (ctx->M7) {
+      L6 = 0.000000;
+   } else {
+      L6 = L10;
+   }
+   PID_O_NEW_VALUE(ctx->client_data, L6);
+   T36 = L6;
+   T26 = L18;
+   T22 = L20;
+   ctx->M36 = T36;
+   ctx->M36_nil = _false;
+   ctx->M26 = T26;
+   ctx->M26_nil = _false;
+   ctx->M22 = T22;
+   ctx->M22_nil = _false;
+   ctx->M7 = ctx->M7 && !(_true);
 }
