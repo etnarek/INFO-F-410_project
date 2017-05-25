@@ -22,7 +22,10 @@ void setup(){
     WiFi.softAP(WIFI_SSID, WIFI_PASSWD);
 
     pinMode(D7, OUTPUT);
-    pidController.kp = 1;
+    pidController.kp = 3.01;
+    pidController.ki = 0.13;
+    pidController.kd = 0.00;
+    pidController.treshold = 20;
 
     server.begin();
 }
@@ -30,7 +33,7 @@ void setup(){
 void loop(){
     server.handleClient();
     int corr = pidController.next_correction(l.sensor_value());
-    Serial.println(pidController.control);
+    Serial.println(l.sensor_value());
     delay(300);
     analogWrite(D7, corr);
 }

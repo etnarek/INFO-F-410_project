@@ -18,11 +18,11 @@ void render_home(PIDcontroller* controller, ControlWebServer* server, Sensor* se
     webpage += (controller->control == OFF) ? "button-primary":"";
     webpage += "\" href=\"/pid/OFF\">OFF</a> <a class=\"button ";
     webpage += (controller->control == FULL) ? "button-primary":"";
-    webpage += "\" href=\"/pid/FULL\">FULL</a> </div></br> <div class=\"row\"> <h4>Advanced PID Configuration</h4> <form method=\"GET\" action=\"/pid/set\"> <div class=\"row\"> <div class=\"four columns\"><label for=\"pidP\">Value of P:</label> <input name=\"P\" type=\"number\" value=\"";
+    webpage += "\" href=\"/pid/FULL\">FULL</a> </div></br> <div class=\"row\"> <h4>Advanced PID Configuration</h4> <form method=\"GET\" action=\"/pid/set\"> <div class=\"row\"> <div class=\"four columns\"><label for=\"pidP\">Value of P:</label> <input name=\"P\" type=\"number\" step=0.001 value=\"";
     webpage += controller->kp;
-    webpage += "\" id=\"pidP\" class=\"u-full-width\"/></div><div class=\"four columns\"><label for=\"pidI\">Value of I :</label> <input name=\"I\" type=\"number\" value=\"";
+    webpage += "\" id=\"pidP\" class=\"u-full-width\"/></div><div class=\"four columns\"><label for=\"pidI\">Value of I :</label> <input name=\"I\" type=\"number\" step=0.001 value=\"";
     webpage += controller->ki;
-    webpage += "\" id=\"pidI\" class=\"u-full-width\"/></div><div class=\"four columns\"><label for=\"pidD\">Value of D :</label> <input name=\"D\" type=\"number\" value=\"";
+    webpage += "\" id=\"pidI\" class=\"u-full-width\"/></div><div class=\"four columns\"><label for=\"pidD\">Value of D :</label> <input name=\"D\" type=\"number\" step=0.001 value=\"";
     webpage += controller->kd;
     webpage += "\" id=\"pidD\" class=\"u-full-width\"/></div></div><input type=\"submit\" value=\"Submit\"/> </form> </div></div></body></html>";
 
@@ -70,9 +70,9 @@ void ControlWebServer::add_controller(PIDcontroller *controller){
             return;
         }
 
-        controller->kp = atoi(this->arg("P").c_str());
-        controller->ki = atoi(this->arg("I").c_str());
-        controller->kd = atoi(this->arg("D").c_str());
+        controller->kp = atof(this->arg("P").c_str());
+        controller->ki = atof(this->arg("I").c_str());
+        controller->kd = atof(this->arg("D").c_str());
         goto_home(this);
     });
 }
