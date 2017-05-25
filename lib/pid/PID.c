@@ -22,11 +22,11 @@ typedef struct  {
    //OUTPUTS
    _real _CORRECTION;
    //REGISTERS
-   _real M19;
-   _boolean M19_nil;
-   _real M16;
-   _boolean M16_nil;
-   _boolean M9;
+   _real M21;
+   _boolean M21_nil;
+   _real M18;
+   _boolean M18_nil;
+   _boolean M11;
 } PID_ctx;
 /*--------
 Output procedures must be defined,
@@ -61,9 +61,9 @@ static void PID_reset_input(PID_ctx* ctx){
 Reset procedure
 --------*/
 void PID_reset(PID_ctx* ctx){
-   ctx->M19_nil = _true;
-   ctx->M16_nil = _true;
-   ctx->M9 = _true;
+   ctx->M21_nil = _true;
+   ctx->M18_nil = _true;
+   ctx->M11 = _true;
    PID_reset_input(ctx);
 }
 /*--------
@@ -86,43 +86,59 @@ Step procedure
 --------*/
 void PID_step(PID_ctx* ctx){
 //LOCAL VARIABLES
-   _real L12;
-   _real L8;
-   _real L7;
-   _real L15;
    _real L14;
-   _real L13;
-   _real L6;
-   _real L18;
+   _real L10;
+   _real L9;
    _real L17;
+   _real L16;
+   _real L15;
+   _real L8;
+   _real L20;
+   _real L19;
+   _real L7;
+   _boolean L6;
+   _boolean L23;
+   _real L22;
    _real L5;
-   _real T19;
-   _real T16;
+   _real T21;
+   _real T18;
 //CODE
-   L12 = (ctx->_TARGET - ctx->_VALUE);
-   if (ctx->M9) {
-      L8 = 0.000000;
+   L14 = (ctx->_TARGET - ctx->_VALUE);
+   if (ctx->M11) {
+      L10 = 0.000000;
    } else {
-      L8 = L12;
+      L10 = L14;
    }
-   L7 = (ctx->_KP * L8);
-   L15 = (ctx->M16 + L8);
-   if (ctx->M9) {
-      L14 = 0.000000;
+   L9 = (ctx->_KP * L10);
+   L17 = (ctx->M18 + L10);
+   if (ctx->M11) {
+      L16 = 0.000000;
    } else {
-      L14 = L15;
+      L16 = L17;
    }
-   L13 = (ctx->_KI * L14);
-   L6 = (L7 + L13);
-   L18 = (L8 - ctx->M19);
-   L17 = (ctx->_KD * L18);
-   L5 = (L6 + L17);
+   L15 = (ctx->_KI * L16);
+   L8 = (L9 + L15);
+   L20 = (L10 - ctx->M21);
+   L19 = (ctx->_KD * L20);
+   L7 = (L8 + L19);
+   L6 = (L7 < 0.000000);
+   L23 = (L7 > 255.000000);
+   if (L23) {
+      L22 = 255.000000;
+   } else {
+      L22 = L7;
+   }
+   if (L6) {
+      L5 = 0.000000;
+   } else {
+      L5 = L22;
+   }
    PID_O_CORRECTION(ctx->client_data, L5);
-   T19 = L8;
-   T16 = L14;
-   ctx->M19 = T19;
-   ctx->M19_nil = _false;
-   ctx->M16 = T16;
-   ctx->M16_nil = _false;
-   ctx->M9 = ctx->M9 && !(_true);
+   T21 = L10;
+   T18 = L16;
+   ctx->M21 = T21;
+   ctx->M21_nil = _false;
+   ctx->M18 = T18;
+   ctx->M18_nil = _false;
+   ctx->M11 = ctx->M11 && !(_true);
 }

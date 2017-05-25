@@ -1,9 +1,12 @@
 node PID(VALUE, TARGET, KP, KI, KD : real) returns (CORRECTION : real);
-var ERROR, INTEG, DERIV : real;
+var ERROR, INTEG, DERIV, COMPUT : real;
 let
   ERROR = 0.0 -> TARGET - VALUE;
   INTEG = 0.0 -> pre(INTEG) + ERROR;
   DERIV = ERROR - pre(ERROR);
 
-  CORRECTION = KP * ERROR + KI * INTEG + KD * DERIV;
+  COMPUT = KP * ERROR + KI * INTEG + KD * DERIV;
+  CORRECTION = if (COMPUT < 0.0) then 0.0
+                else if (COMPUT > 255.0) then 255.0
+                else COMPUT;
 tel
