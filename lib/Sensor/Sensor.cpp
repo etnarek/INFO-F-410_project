@@ -18,5 +18,5 @@ PhotoSensor::PhotoSensor(int pin, int Rr, double Uref, int _Ra, int _Ea, double 
 
 int PhotoSensor::sensor_value(){
     int resistance = read2resistor();
-    return pow(10, (log10((double)Ra/resistance)/Y + log10(Ea)));
+    return (Ra/pow(resistance, 1.25)) * Ea;
 }
