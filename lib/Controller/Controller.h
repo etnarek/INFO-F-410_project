@@ -28,7 +28,6 @@ class PIDcontroller : public Controller {
         PIDcontroller(String name);
         int next_correction(int current_value);
         double kp, ki, kd;
-        ControlType ctrl;
 };
 
 class BANGcontroller : public Controller {

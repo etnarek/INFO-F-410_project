@@ -12,7 +12,7 @@ void BANG_O_CORRECTION(void* cdata, _integer value){
 
 Controller::Controller(String name) : name(name), treshold(42), control(ON){}
 
-PIDcontroller::PIDcontroller(String name) : Controller(name), correction(0), ctx(PID_new_ctx((void*)&correction)), kp(0), ki(0), kd(0), ctrl(OFF){};
+PIDcontroller::PIDcontroller(String name) : Controller(name), correction(0), ctx(PID_new_ctx((void*)&correction)), kp(0), ki(0), kd(0){};
 
 BANGcontroller::BANGcontroller(String name) : Controller(name), switch_on(0), ctx(BANG_new_ctx((void*)&switch_on)){};
 
@@ -22,7 +22,7 @@ int PIDcontroller::next_correction(int current_value){
     PID_I_KP(ctx, (_real)kp);
     PID_I_KI(ctx, (_real)ki);
     PID_I_KD(ctx, (_real)kd);
-    PID_I_CTRL(ctx, (_integer)ctrl);
+    PID_I_CTRL(ctx, (_integer)control);
     PID_step(ctx);
     return (int)correction;
 }
