@@ -35,5 +35,5 @@ void loop(){
     int corr = pidController.next_correction(l.sensor_value());
     Serial.println(l.sensor_value());
     delay(300);
-    analogWrite(D7, corr);
+    analogWrite(D7, pidController.treshold);
 }

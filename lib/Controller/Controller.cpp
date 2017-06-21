@@ -30,7 +30,7 @@ int PIDcontroller::next_correction(int current_value){
 
 int BANGcontroller::next_correction(int current_value){
     BANG_I_VALUE(ctx, (_integer)current_value);
-    BANG_I_TARGET(ctx, (_integer)treshold);
+    BANG_I_VALUE(ctx, (_integer)treshold);
     BANG_step(ctx);
     return (int)switch_on;
 }
