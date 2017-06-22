@@ -45,14 +45,14 @@ let
   D_VALUE = ERROR - PRE_ERROR;
 tel
 
-node ENV(LUM, LED : real) returns (VALUE : real);
+node ENV(LUM, LED: real) returns (VALUE : real);
 let
   VALUE = KLum * LUM + KLed * LED + Kcst;
 tel
 
-node SYSTEM(KP, KI, KD : real) returns (E : real);
+node SYSTEM(KP, KI, KD, PERT : real) returns (E : real);
 var LED: real;
 let
-  E = AMB -> ENV(AMB, pre(LED));
+  E = AMB -> ENV(AMB, pre(LED), PERT);
   LED = 0.0 -> PID_SUBROUTINE(E, TAR, KP, KI, KD);
 tel
