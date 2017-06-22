@@ -3,6 +3,9 @@ const MAXVAL = 255.0;
 const ON = 1;
 const OFF = 0;
 const FULL = 2;
+const KLum = 0.90657025
+const KLed = 0.14482553
+const Kcst = 1.10813585
 
 node PID(VALUE, TARGET, KP, KI, KD : real; CTRL : int) returns (NEW_VALUE : real);
 let
@@ -38,4 +41,9 @@ tel
 node D(ERROR, PRE_ERROR : real) returns (D_VALUE : real);
 let
   D_VALUE = ERROR - PRE_ERROR;
+tel
+
+node ENV(LUM, LED : real) returns (VALUE : real);
+let
+  VALUE = KLum * LUM + KLed * LED + Kcst;
 tel
