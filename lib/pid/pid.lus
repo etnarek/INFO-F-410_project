@@ -3,9 +3,11 @@ const MAXVAL = 255.0;
 const ON = 1;
 const OFF = 0;
 const FULL = 2;
-const KLum = 0.90657025
-const KLed = 0.14482553
-const Kcst = 1.10813585
+const KLum = 0.906570;
+const KLed = 0.144825;
+const Kcst = 1.108136;
+const AMB = 10.0;
+const TAR = 20.0;
 
 node PID(VALUE, TARGET, KP, KI, KD : real; CTRL : int) returns (NEW_VALUE : real);
 let
@@ -46,4 +48,11 @@ tel
 node ENV(LUM, LED : real) returns (VALUE : real);
 let
   VALUE = KLum * LUM + KLed * LED + Kcst;
+tel
+
+node SYSTEM(KP, KI, KD : real) returns (E : real);
+var LED: real;
+let
+  E = AMB -> ENV(AMB, pre(LED));
+  LED = 0.0 -> PID_SUBROUTINE(E, TAR, KP, KI, KD);
 tel
