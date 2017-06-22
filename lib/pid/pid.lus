@@ -50,9 +50,9 @@ let
   VALUE = KLum * LUM + KLed * LED + Kcst;
 tel
 
-node SYSTEM(KP, KI, KD, PERT : real) returns (E : real);
+node SYSTEM(KP, KI, KD: real) returns (E : real);
 var LED: real;
 let
-  E = AMB -> ENV(AMB, pre(LED), PERT);
+  E = AMB -> ENV(AMB, pre(LED));
   LED = 0.0 -> PID_SUBROUTINE(E, TAR, KP, KI, KD);
 tel
